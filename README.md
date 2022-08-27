@@ -1,2 +1,2 @@
 # libplayground-randhasher
-Generate randomized hashes of strings using randomized combinations of randomizing algorithms
+generate an entire table of all hashing results for a given string
