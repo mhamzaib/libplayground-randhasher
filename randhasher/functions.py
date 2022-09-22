@@ -1,42 +1,48 @@
 import hashlib as hl
+import re
 
 class HashTypes:
-    sha = ['sha1', 'sha224', 'sha256', 'sha384', 'sha512']
-    sha3 = ['sha3_224', 'sha3_256', 'sha3_384', 'sha3_512()']
-    blakes = ['blake2b', 'blake2s']
-    others = ['shake_128', 'shake_256', 'md5']
-
-def generateSha(string, noHex=False, types=[]):
-    compiled_hashes=[]
+    unsafe = False
     
-    return
-
-def generateSha3(string, noHex=False, types=[]):
-    compiled_hashes=[]
+    def __init__(self, us: bool):
+        self.unsafe = us
     
-    return
-
-def generateAllSha(string, noHex=False, types=[]):
-    compiled_hashes=[]
+    ## TODO: Recieve failure : pattern is not callable -> fix
+    def typeExtractor(string, unsafe=False):
+        allTypes = hl.algorithms_available if unsafe else hl.algorithms_guaranteed
+        pattern = re.compile(string+"*.")
+        return list(filter(pattern, allTypes))
     
-    return
-
-def generateBlakes(string, noHex=False, types=[]):
-    compiled_hashes=[]
+    sha = typeExtractor('sha')
+    blake = typeExtractor('blake')
     
-    return
 
-def generateOtherHashes(string, noHex=False, types=[]):
-    compiled_hashes=[]
+    def generateSha(string, noHex=False, types=[]):
+        compiled_hashes=[]
+        
+        return
     
-    return
+    def generateSha3(string, noHex=False, types=[]):
+        compiled_hashes=[]
+        
+        return    
 
-def generateCombination(string, types, noHex=False):
-    compiled_hashes=[]
-    
-    return
+    def generateBlakes(string, noHex=False, types=[]):
+        compiled_hashes=[]
+        
+        return
 
-def generateAll(string, noHex=False):
-    compiled_hashes=[]
-    
-    return
+    def generateOtherHashes(string, noHex=False, types=[]):
+        compiled_hashes=[]
+        
+        return
+
+    def generateCombination(string, types, noHex=False):
+        compiled_hashes=[]
+        
+        return
+
+    def generateAll(string, noHex=False):
+        compiled_hashes=[]
+        
+        return
