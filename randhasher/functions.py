@@ -7,11 +7,10 @@ class HashTypes:
     def __init__(self, us: bool):
         self.unsafe = us
     
-    ## TODO: Recieve failure : pattern is not callable -> fix
     def typeExtractor(string, unsafe=False):
         allTypes = hl.algorithms_available if unsafe else hl.algorithms_guaranteed
         pattern = re.compile(string+"*.")
-        return list(filter(pattern, allTypes))
+        return list(filter(pattern.match, allTypes))
     
     sha = typeExtractor('sha')
     blake = typeExtractor('blake')
@@ -46,3 +45,10 @@ class HashTypes:
         compiled_hashes=[]
         
         return
+
+# def main():
+#     hashed = HashTypes(True)
+#     print(hashed.sha)
+    
+# if __name__ == "__main__":
+#     main()
