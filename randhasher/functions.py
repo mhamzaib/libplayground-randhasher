@@ -14,9 +14,9 @@ class HashTypes:
         return list(filter(pattern.match, allTypes))
     
 
-    def generateSha(string, noHex=False, types=[]):
-        compiled_hashes=[]
-        
+    def generateSha(self, noHex=False, types=[]):
+        hashList = self.typeExtractor("sha")
+        return self.generator(hashList, noHex)        
         return
     
     def generateSha3(self, noHex=False):
@@ -45,13 +45,15 @@ class HashTypes:
         return
     
     def generator(self, hashList, noHex=False):
+        print(hashList)
         hexdigests = []
         digests = []
         for algo in hashList:
-            sha3 = getattr(hl, algo)
+            print(algo)
+            hash = getattr(hl, algo)
             if noHex==False: 
-                hexdigests.append(sha3(b"this is a test").hexdigest())
-            digests.append(sha3(b"this is a test").digest())
+                hexdigests.append(hash(b"this is a test").hexdigest())
+            digests.append(hash(b"this is a test").digest())
         compiled = pd.DataFrame({'Algo': hashList, 'Digest': digests})
         if noHex==False:
             compiled['HexDigests'] = hexdigests
@@ -59,7 +61,7 @@ class HashTypes:
 
 def main():
     hashed = HashTypes()
-    sha3 = hashed.generateSha3()
+    sha3 = hashed.generateSha()
     print(sha3)
     
 if __name__ == "__main__":
