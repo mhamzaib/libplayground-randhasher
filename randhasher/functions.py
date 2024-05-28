@@ -1,19 +1,17 @@
+import pandas as pd
 import hashlib as hl
 import re
 
 class HashTypes:
     unsafe = False
     
-    def __init__(self, us: bool):
+    def __init__(self, us: bool=False):
         self.unsafe = us
     
-    def typeExtractor(string, unsafe=False):
+    def typeExtractor(self, string, unsafe=False):
         allTypes = hl.algorithms_available if unsafe else hl.algorithms_guaranteed
-        pattern = re.compile(string+"*.")
+        pattern = re.compile(string + "*.")
         return list(filter(pattern.match, allTypes))
-    
-    sha = typeExtractor('sha')
-    blake = typeExtractor('blake')
     
 
     def generateSha(string, noHex=False, types=[]):
@@ -21,10 +19,10 @@ class HashTypes:
         
         return
     
-    def generateSha3(string, noHex=False, types=[]):
-        compiled_hashes=[]
+    def generateSha3(self, noHex=False):
+        hashList = self.typeExtractor("sha3_")
+        return self.generator(hashList, noHex)
         
-        return    
 
     def generateBlakes(string, noHex=False, types=[]):
         compiled_hashes=[]
@@ -45,10 +43,24 @@ class HashTypes:
         compiled_hashes=[]
         
         return
-
-# def main():
-#     hashed = HashTypes(True)
-#     print(hashed.sha)
     
-# if __name__ == "__main__":
-#     main()
+    def generator(self, hashList, noHex=False):
+        hexdigests = []
+        digests = []
+        for algo in hashList:
+            sha3 = getattr(hl, algo)
+            if noHex==False: 
+                hexdigests.append(sha3(b"this is a test").hexdigest())
+            digests.append(sha3(b"this is a test").digest())
+        compiled = pd.DataFrame({'Algo': hashList, 'Digest': digests})
+        if noHex==False:
+            compiled['HexDigests'] = hexdigests
+        return compiled
+
+def main():
+    hashed = HashTypes()
+    sha3 = hashed.generateSha3()
+    print(sha3)
+    
+if __name__ == "__main__":
+    main()
