@@ -8,20 +8,31 @@ class HashTypes:
     def __init__(self, us: bool=False):
         self.unsafe = us
     
-    def typeExtractor(self, string, unsafe=False):
+    def typeExtractor(self, string, unsafe=True):
         allTypes = hl.algorithms_available if unsafe else hl.algorithms_guaranteed
-        pattern = re.compile(string + "*.")
+        print(allTypes)
+        pattern = re.compile('^'+string+'\d+[^_]*$' )
         return list(filter(pattern.match, allTypes))
     
 
     def generateSha(self, noHex=False, types=[]):
-        hashList = self.typeExtractor("sha")
-        return self.generator(hashList, noHex)        
         return
     
     def generateSha3(self, noHex=False):
         hashList = self.typeExtractor("sha3_")
-        return self.generator(hashList, noHex)
+        print(hashList)
+        hexdigests = []
+        digests = []
+        for algo in hashList:
+            print(algo)
+            hash = getattr(hl, algo)
+            if noHex==False: 
+                hexdigests.append(hash(b"this is a test").hexdigest())
+            digests.append(hash(b"this is a test").digest())
+        compiled = pd.DataFrame({'Algo': hashList, 'Digest': digests})
+        if noHex==False:
+            compiled['HexDigests'] = hexdigests
+        return compiled
         
 
     def generateBlakes(string, noHex=False, types=[]):
@@ -44,24 +55,11 @@ class HashTypes:
         
         return
     
-    def generator(self, hashList, noHex=False):
-        print(hashList)
-        hexdigests = []
-        digests = []
-        for algo in hashList:
-            print(algo)
-            hash = getattr(hl, algo)
-            if noHex==False: 
-                hexdigests.append(hash(b"this is a test").hexdigest())
-            digests.append(hash(b"this is a test").digest())
-        compiled = pd.DataFrame({'Algo': hashList, 'Digest': digests})
-        if noHex==False:
-            compiled['HexDigests'] = hexdigests
-        return compiled
+
 
 def main():
     hashed = HashTypes()
-    sha3 = hashed.generateSha()
+    sha3 = hashed.generateSha3()
     print(sha3)
     
 if __name__ == "__main__":
