@@ -14,65 +14,37 @@ class HashTypes:
         pattern = re.compile('^'+string+'\d+[^_]*$' )
         return list(filter(pattern.match, allTypes))
     
-
-    def generateSha(self, noHex=False, types=[]):
-        hashList = self.typeExtractor("sha")
+    def generator(self, hashtype: str, string: str, length=0, noHex=False):
+        hashList = self.typeExtractor(hashtype)
         hexdigests = []
         digests = []
+        estring = string.encode('utf-8')
         for algo in hashList:
             hash = getattr(hl, algo)
+            kwargs = {'length': length} if hashtype.startswith("shake") else {}
             if noHex==False: 
-                hexdigests.append(hash(b"this is a test").hexdigest())
-            digests.append(hash(b"this is a test").digest())
+                hexdigests.append(hash(estring).hexdigest(**kwargs))
+            digests.append(hash(estring).digest(**kwargs))
         compiled = pd.DataFrame({'Algo': hashList, 'Digest': digests})
         if noHex==False:
             compiled['HexDigests'] = hexdigests
         return compiled
     
-    def generateSha3(self, noHex=False):
-        hashList = self.typeExtractor("sha3_")
-        hexdigests = []
-        digests = []
-        for algo in hashList:
-            hash = getattr(hl, algo)
-            if noHex==False: 
-                hexdigests.append(hash(b"this is a test").hexdigest())
-            digests.append(hash(b"this is a test").digest())
-        compiled = pd.DataFrame({'Algo': hashList, 'Digest': digests})
-        if noHex==False:
-            compiled['HexDigests'] = hexdigests
-        return compiled
+
+    def generateSha(self, string, noHex=False):
+        return self.generator('sha', string, noHex=noHex)
+    
+    def generateSha3(self, string, noHex=False):
+        return self.generator('sha3_', string, noHex=noHex)
         
 
-    def generateBlakes(self, noHex=False, types=[]):
-        hashList = self.typeExtractor("blake")
-        hexdigests = []
-        digests = []
-        for algo in hashList:
-            hash = getattr(hl, algo)
-            if noHex==False: 
-                hexdigests.append(hash(b"this is a test").hexdigest())
-            digests.append(hash(b"this is a test").digest())
-        compiled = pd.DataFrame({'Algo': hashList, 'Digest': digests})
-        if noHex==False:
-            compiled['HexDigests'] = hexdigests
-        return compiled
+    def generateBlakes(self, string, noHex=False):
+        return self.generator('blake', string, noHex=noHex)
     
-    def generateShakes(self, length, noHex=False, types=[]):
-        hashList = self.typeExtractor("shake_")
-        hexdigests = []
-        digests = []
-        for algo in hashList:
-            hash = getattr(hl, algo)
-            if noHex==False: 
-                hexdigests.append(hash(b"this is a test").hexdigest(length))
-            digests.append(hash(b"this is a test").digest(length))
-        compiled = pd.DataFrame({'Algo': hashList, 'Digest': digests})
-        if noHex==False:
-            compiled['HexDigests'] = hexdigests
-        return compiled
+    def generateShakes(self, string, length, noHex=False):
+        return self.generator('shake_', string, length=length, noHex=noHex)
 
-    def generateOtherHashes(string, noHex=False, types=[]):
+    def generateOtherHashes(string, noHex=False):
         compiled_hashes=[]
         
         return
@@ -91,7 +63,7 @@ class HashTypes:
 
 def main():
     hashed = HashTypes()
-    sha3 = hashed.generateShakes(52)
+    sha3 = hashed.generateBlakes("This works")
     print(sha3)
     
 if __name__ == "__main__":
