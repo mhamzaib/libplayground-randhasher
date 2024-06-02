@@ -10,24 +10,34 @@ class HashTypes:
     
     def typeExtractor(self, string, unsafe=True):
         allTypes = hl.algorithms_available if unsafe else hl.algorithms_guaranteed
-        print(allTypes)
         pattern = re.compile('^'+string+'\d+[^_]*$' )
         return list(filter(pattern.match, allTypes))
     
     def generator(self, hashtype: str, string: str, length=0, noHex=False):
-        hashList = self.typeExtractor(hashtype)
+        try: 
+            hashList = self.typeExtractor(hashtype)
+            if len(hashList) == 0:
+                raise ValueError('Error, no hashes found, please enter a prefix from the following set', hl.algorithms_available if self.unsafe else hl.algorithms_guaranteed)
+        except Exception as e:
+            print (e)
+            return False
         hexdigests = []
         digests = []
         estring = string.encode('utf-8')
         for algo in hashList:
-            hash = getattr(hl, algo)
-            kwargs = {'length': length} if hashtype.startswith("shake") else {}
-            if noHex==False: 
-                hexdigests.append(hash(estring).hexdigest(**kwargs))
-            digests.append(hash(estring).digest(**kwargs))
+            try:
+                hash = getattr(hl, algo)
+                kwargs = {'length': length} if hashtype.startswith("shake") else {}
+                if noHex==False: 
+                    hexdigests.append(hash(estring).hexdigest(**kwargs))
+                digests.append(hash(estring).digest(**kwargs))
+            except Exception as e:
+                return e
         compiled = pd.DataFrame({'Algo': hashList, 'Digest': digests})
         if noHex==False:
             compiled['HexDigests'] = hexdigests
+        if compiled.empty:
+            return ValueError('Result is an empty set')
         return compiled
     
 
