@@ -73,8 +73,8 @@ class HashTypes:
 
 def main():
     hashed = HashTypes()
-    sha3 = hashed.generateBlakes("This works")
-    print(sha3)
+    sha3 = hashed.generateSha3("This works")
+    print(type(sha3))
     
 if __name__ == "__main__":
     main()
