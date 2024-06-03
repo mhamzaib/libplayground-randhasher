@@ -14,16 +14,18 @@ class HashTypes:
         return list(filter(pattern.match, allTypes))
     
     def generator(self, hashtype: str, string: str, length=0, noHex=False):
+        try:
+            estring = string.encode('utf-8') if len(string) > 0 else (lambda: (_ for _ in ()).throw(ValueError("Cannot generate hash from empty string")))()
+        except Exception as e:
+            return e
+        hexdigests = []
+        digests = []
         try: 
             hashList = self.typeExtractor(hashtype)
             if len(hashList) == 0:
                 raise ValueError('Error, no hashes found, please enter a prefix from the following set', hl.algorithms_available if self.unsafe else hl.algorithms_guaranteed)
         except Exception as e:
-            print (e)
-            return False
-        hexdigests = []
-        digests = []
-        estring = string.encode('utf-8')
+            return e
         for algo in hashList:
             try:
                 hash = getattr(hl, algo)
@@ -73,8 +75,8 @@ class HashTypes:
 
 def main():
     hashed = HashTypes()
-    sha3 = hashed.generateSha3("This works")
-    print(type(sha3))
+    sha3 = hashed.generateSha3("test")
+    print(sha3)
     
 if __name__ == "__main__":
     main()

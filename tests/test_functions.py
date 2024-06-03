@@ -6,6 +6,6 @@ from randhasher.functions import HashTypes
 def test_sha3():
     instance = HashTypes()
     assert type(instance.generateSha3(string="This works", noHex=False)) is pandas.core.frame.DataFrame
-    assert instance.generateSha3(string="", noHex=False) is ValueError
+    assert type(instance.generateSha3(string="", noHex=False)) is ValueError
 
  
