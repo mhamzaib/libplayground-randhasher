@@ -28,7 +28,7 @@ class HashTypes:
         return self.generator('sha', string, noHex=noHex)
     
     def generateSha3(self, string, noHex=False):
-        return self.generator('sha3', string, noHex=noHex)
+        return self.generator('sha3_', string, noHex=noHex)
         
     def generateBlakes(self, string, noHex=False):
         return self.generator('blake', string, noHex=noHex)
@@ -79,3 +79,11 @@ class HashTypes:
             compiled['HexDigests'] = hexdigests
             
         return compiled
+
+def main():
+    hashed = HashTypes()
+    others = hashed.generateSha3("Portfolio Test")
+    print(others)
+    
+if __name__ == "__main__":
+    main()
