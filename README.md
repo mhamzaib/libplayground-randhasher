@@ -23,14 +23,13 @@ cd libplayground-randhasher
 
 # Install in editable mode (recommended)
 pip install -e .
-...
-
+```
 ---
 
 ## Quick Start
 
 ### As a Library
-...python
+```python
 from randhasher.functions import HashTypes
 
 # Initialize (unsafe=True allows access to non-guaranteed platform hashes)
@@ -40,17 +39,17 @@ hasher = HashTypes(unsafe=False)
 df = hasher.generateSha3("your-secure-string")
 
 print(df)
-...
+```
 
 ### As a CLI Tool
 Once installed, you can run `randhasher` directly from your terminal:
-...bash
+```bash
 # Get all available hashes for a string
 randhasher "hello world" --type all
 
 # Get only SHA-2 variants without hex columns
 randhasher "secret-key" --type sha --no-hex
-...
+```
 
 ---
 
@@ -65,10 +64,10 @@ randhasher "secret-key" --type sha --no-hex
 
 This project uses `pytest` for unit testing and GitHub Actions for CI/CD.
 
-...bash
+```bash
 # Run tests locally
 pytest tests/
-...
+```
 
 ### Future Roadmap
 - [ ] Add support for HMAC (keyed-hashing).
