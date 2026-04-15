@@ -79,11 +79,3 @@ class HashTypes:
             compiled['HexDigests'] = hexdigests
             
         return compiled
-
-def main():
-    hashed = HashTypes()
-    others = hashed.generateSha3("Portfolio Test")
-    print(others)
-    
-if __name__ == "__main__":
-    main()
