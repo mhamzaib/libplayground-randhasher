@@ -1,13 +1,19 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-setup(name='randhasher', 
-    version = '0.1',
-    description = 'Generates entire table of different types of hashes from a given input',
-    url='https://github.com/mhamzaib/libplayground-randhasher',
-    author='mhamzaib',
-    packages=['randhasher'],
+setup(
+    name='randhasher', 
+    version='0.2.0',
+    description='Generates structured tables of multiple hash types from a single input',
+    author='mhamzaib'
+    url='https://github.com/mhamzaib/libplayground-randhasher'
+    packages=find_packages(),
     install_requires=[
-        'hashlib',
-        'markdown',
+        'pandas',
     ],
-    zip_safe=False)
+    entry_points={
+        'console_scripts': [
+            'randhasher=randhasher.__main__:main',
+        ],
+    },
+    python_requires='>=3.7',
+)
