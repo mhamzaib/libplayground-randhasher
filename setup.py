@@ -2,9 +2,8 @@ from setuptools import setup, find_packages
 
 setup(
     name='randhasher', 
-    version='0.2.0',
-    description='Generates structured tables of multiple hash types from a single input',
-    author='mhamzaib',
+    version='1.0.0',
+    description='Generates structured hash comparison tables from a given input',
     url='https://github.com/mhamzaib/libplayground-randhasher',
     packages=find_packages(),
     install_requires=[
@@ -12,7 +11,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'randhasher=randhasher.__main__:main',
+            'randhasher=randhasher.cli:main',
         ],
     },
     python_requires='>=3.7',
