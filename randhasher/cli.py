@@ -1,6 +1,9 @@
 import argparse
 import sys
 from randhasher.functions import HashTypes
+from rich.console import Console
+from rich.table import Table
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -48,7 +51,23 @@ def main():
             df = hasher.generateAll(args.string, args.length, noHex=args.no_hex)
 
         if df is not None:
-            print(df.to_string(index=False))
+            console = Console()
+            table = Table(title="Hash Comparison Results", show_lines=True)
+
+            table.add_column("Algo", style="cyan", no_wrap=True)
+            table.add_column("Digest", style="magenta", overflow="fold")
+            table.add_column("HexDigests", style="green", overflow="fold")
+
+            for _, row in df.iterrows():
+                table.add_row(
+                    str(row['Algo']), 
+                    str(row['Digest']), 
+                    str(row['HexDigests'])
+                )
+
+            console.print(table)
+
+            
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)

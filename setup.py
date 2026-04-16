@@ -8,6 +8,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'pandas',
+        'rich',
     ],
     entry_points={
         'console_scripts': [
